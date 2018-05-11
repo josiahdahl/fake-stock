@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
+
 import React from 'react';
-import { Image, List } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
 import { RecentItem } from './RecentItem';
 
 export const RecentItems = ({ companies }) => (
   <List>
-    {companies.map(company => <RecentItem key={company.symbol} {...company}/>)}
+    {companies.map((company, i) => <RecentItem key={i} {...company}/>)}
   </List>
 );
 
-RecentItems.propTypes = {};
+RecentItems.propTypes = {
+  companies: PropTypes.array.isRequired,
+};

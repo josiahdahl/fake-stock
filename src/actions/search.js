@@ -1,50 +1,42 @@
 import { StockListingService } from '../services/stock-listings';
+import { getStock } from './stocks';
 
 const stockListingService = StockListingService();
 
 export const SEARCH_STOCK = 'STOCKS_SEARCH';
 
-function searchStock(stock) {
-  return {
-    type: SEARCH_STOCK,
-    stock,
-  }
-}
+// function searchStock(stock) {
+//   return {
+//     type: SEARCH_STOCK,
+//     stock,
+//   }
+// }
 
 export const SET_CURRENT_STOCK = 'SET_CURRENT_STOCK';
 
-function setCurrentStock(stock) {
+function setCurrentStock(symbol) {
   return {
     type: SET_CURRENT_STOCK,
-    stock,
+    symbol,
   }
 }
 
 export const ADD_RECENT_STOCK = 'ADD_RECENT_STOCK';
 
-function addRecentStock(stock) {
+function addRecentStock(symbol) {
   return {
     type: ADD_RECENT_STOCK,
-    stock,
+    symbol,
   }
 }
 
 
-export function getStock(symbol) {
+export function searchStock(symbol) {
   return function (dispatch) {
-    return Promise.all([
-      stockListingService.getCompany(symbol),
-      stockListingService.getLogo(symbol),
-    ])
-      .then(([{ data: company }, { data: logo }]) => {
-        const { url } = logo;
-        const stock = {
-          ...company,
-          logo: url,
-        };
-
-        dispatch(setCurrentStock(stock));
-        dispatch(addRecentStock(stock));
+    return dispatch(getStock(symbol))
+      .then((stock) => {
+        dispatch(setCurrentStock(stock.symbol));
+        dispatch(addRecentStock(stock.symbol));
       });
   }
 }

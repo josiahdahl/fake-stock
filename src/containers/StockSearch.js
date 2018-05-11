@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Search } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { getStock } from '../actions/search';
+import { searchStock } from '../actions/search';
 import { StockListingService } from '../services/stock-listings';
 
 
@@ -68,7 +68,7 @@ export class StockSearchComponent extends Component {
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-  loadStock: symbol => dispatch(getStock(symbol)),
+  loadStock: symbol => dispatch(searchStock(symbol)),
 });
 
 export const StockSearch = connect(
