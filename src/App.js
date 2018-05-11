@@ -5,6 +5,7 @@ import { AddStocksForm } from "./containers/AddStocksForm";
 import { RecentItemsList } from './containers/RecentItemsList';
 import { SearchResult } from './containers/SearchResult';
 import { DefaultView } from './views/DefaultView';
+import { StockPortfolio } from './containers/StockPortfolio';
 
 class App extends Component {
   constructor() {
@@ -35,7 +36,8 @@ class App extends Component {
                 <Grid.Column>
                 </Grid.Column>
                 <Grid.Column>
-                  <AddStocksForm/>
+                  <StockPortfolio />
+                  {/*<AddStocksForm/>*/}
                 </Grid.Column>
               </Grid.Row>
             </Grid.Column>

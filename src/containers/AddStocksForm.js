@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Form, GridColumn, GridRow, List, ListItem } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
-export class AddStocksForm extends Component {
+class AddStocksFormComponent extends Component {
   static propTypes = {};
 
   static defaultProps = {};
@@ -70,3 +71,11 @@ export class AddStocksForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+
+});
+
+export const AddStocksForm = connect(
+
+)(AddStocksFormComponent);
