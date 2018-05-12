@@ -1,10 +1,9 @@
-import { SEARCH_STOCK, ADD_RECENT_STOCK, SET_CURRENT_STOCK } from '../actions/search';
+import { ADD_RECENT_STOCK, SET_CURRENT_STOCK } from '../actions/search';
 
 const initialState = {
   current: null,
   history: [],
   entities: {},
-  // isFetching: false,
 };
 
 export const search = (state = initialState, action) => {

@@ -4,13 +4,11 @@ import React, { Component } from 'react';
 import { Tab } from 'semantic-ui-react';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
 import differenceInSeconds from 'date-fns/difference_in_seconds';
 import { PortfolioImport } from '../components/PortfolioImport';
 import { importFromInvestopedia } from '../actions/portfolio';
 import { PortfolioCurrent } from '../components/PortfolioCurrent';
 import { getStockPrices } from '../actions/stocks';
-import { StockListingService } from '../services/stock-listings';
 
 class StockPortfolioComponent extends Component {
   static propTypes = {
@@ -19,8 +17,6 @@ class StockPortfolioComponent extends Component {
     portfolio: PropTypes.object,
     currentPrices: PropTypes.object,
   };
-
-  stockListingService = StockListingService();
 
   priceUpdateInterval;
   currentTimeInterval;
@@ -33,10 +29,6 @@ class StockPortfolioComponent extends Component {
     currentTime: 0,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   handleChange({ target }) {
     const { value } = target;
     this.setState({
@@ -46,8 +38,6 @@ class StockPortfolioComponent extends Component {
 
   handleSubmit() {
     const { rawPortfolio } = this.state;
-    // this.props.importFromInvestopedia(rawPortfolio)
-    //   .then(portfolio => this.props.updatePrices(portfolio.stocks));
     this.props.importFromInvestopedia(rawPortfolio)
       .then(() => this.updatePrices());
     this.resetImport();

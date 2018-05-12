@@ -1,7 +1,4 @@
-import { StockListingService } from '../services/stock-listings';
 import { getStock } from './stocks';
-
-const stockListingService = StockListingService();
 
 export const SEARCH_STOCK = 'STOCKS_SEARCH';
 

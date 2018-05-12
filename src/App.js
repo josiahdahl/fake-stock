@@ -1,16 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Grid } from 'semantic-ui-react';
-import { StockSearch } from "./containers/StockSearch";
-import { RecentItemsList } from './containers/RecentItemsList';
-import { SearchResult } from './containers/SearchResult';
+import { Grid } from 'semantic-ui-react';
 import { DefaultView } from './views/DefaultView';
 import { StockPortfolio } from './containers/StockPortfolio';
 
 class App extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <div className="App" style={{height: '100%'}}>

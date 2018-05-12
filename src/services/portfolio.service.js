@@ -24,7 +24,7 @@ export const parseInvestopediaPortfolio = (text) => {
         ...stocks,
         {
           symbol,
-          quantity: parseInt(quantity),
+          quantity: parseInt(quantity, 10),
           // Given a purchase price 12.00, multiply by 100 to get 1200.00 (cents) then floor for an integer
           purchasePrice: Math.floor((parseFloat(purchasePrice) * 100)),
         },

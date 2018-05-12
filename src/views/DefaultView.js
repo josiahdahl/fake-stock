@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Card, Container, Menu, Grid, Sidebar, Header, Icon } from 'semantic-ui-react';
+import { Container, Header, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import { StockSearch } from '../containers/StockSearch';
 import { SearchResult } from '../containers/SearchResult';
 import { RecentItemsList } from '../containers/RecentItemsList';
