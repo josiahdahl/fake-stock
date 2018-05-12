@@ -6,6 +6,7 @@ import { importFromInvestopedia } from '../actions/portfolio';
 import { PortfolioCurrent } from '../components/PortfolioCurrent';
 import { getStockPrices } from '../actions/stocks';
 import { StockListingService } from '../services/stock-listings';
+import { Tab } from 'semantic-ui-react';
 
 class StockPortfolioComponent extends Component {
   static propTypes = {
@@ -47,25 +48,6 @@ class StockPortfolioComponent extends Component {
     });
   }
 
-  render() {
-    const { rawPortfolio } = this.state;
-    const { portfolio = { stocks: [] }, currentPrices } = this.props;
-
-    const stocks = portfolio
-      ? portfolio.stocks.map(s => ({ ...s, currentPrice: currentPrices[s.symbol] || 0 }))
-      : [];
-    return (
-      <div>
-        {portfolio ? <PortfolioCurrent stocks={stocks}/> : ''}
-        <PortfolioImport
-          rawPortfolio={rawPortfolio}
-          handleChange={(e) => this.handleChange(e)}
-          handleSubmit={() => this.handleSubmit()}
-        />
-      </div>
-    );
-  }
-
   setupStockPriceWatch() {
     this.priceUpdateInterval = setInterval(() => {
       const { portfolio = { stocks: [] } } = this.props;
@@ -83,6 +65,27 @@ class StockPortfolioComponent extends Component {
     if (this.priceUpdateInterval) {
       clearInterval(this.priceUpdateInterval);
     }
+  }
+
+  render() {
+    const { rawPortfolio } = this.state;
+    const { portfolio = { stocks: [] }, currentPrices } = this.props;
+
+    const stocks = portfolio
+      ? portfolio.stocks.map(s => ({ ...s, currentPrice: currentPrices[s.symbol] || 0 }))
+      : [];
+
+    const panes = [
+      {menuItem: 'Portfolio', render: () => <Tab.Pane>{portfolio ? <PortfolioCurrent stocks={stocks}/> : 'No portfolio, please import'}</Tab.Pane>},
+      {menuItem: 'Import', render: () => <Tab.Pane><PortfolioImport
+          rawPortfolio={rawPortfolio}
+          handleChange={(e) => this.handleChange(e)}
+          handleSubmit={() => this.handleSubmit()}
+        /></Tab.Pane>}
+    ];
+    return (
+      <Tab panes={panes}/>
+    );
   }
 }
 

@@ -15,8 +15,8 @@ class App extends Component {
     return (
       <div className="App">
         <DefaultView>
-          <Grid columns={3}>
-            <Grid.Column>
+          <Grid padded='horizontally'>
+            <Grid.Column width={5}>
               <Card>
                 <Card.Content>
                   <StockSearch/>
@@ -30,14 +30,8 @@ class App extends Component {
                 </Card.Content>
               </Card>
             </Grid.Column>
-            <Grid.Column>
-              <Grid.Row>
-                <Grid.Column>
-                </Grid.Column>
-                <Grid.Column>
-                  <StockPortfolio />
-                </Grid.Column>
-              </Grid.Row>
+            <Grid.Column width={11}>
+              <StockPortfolio/>
             </Grid.Column>
           </Grid>
         </DefaultView>
