@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import { Tab } from 'semantic-ui-react';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
+import differenceInSeconds from 'date-fns/difference_in_seconds';
 import { PortfolioImport } from '../components/PortfolioImport';
 import { importFromInvestopedia } from '../actions/portfolio';
 import { PortfolioCurrent } from '../components/PortfolioCurrent';
@@ -21,9 +23,14 @@ class StockPortfolioComponent extends Component {
   stockListingService = StockListingService();
 
   priceUpdateInterval;
+  currentTimeInterval;
+
 
   state = {
     rawPortfolio: '',
+    activeIndex: 0,
+    lastPricesUpdate: 0,
+    currentTime: 0,
   };
 
   constructor(props) {
@@ -39,9 +46,21 @@ class StockPortfolioComponent extends Component {
 
   handleSubmit() {
     const { rawPortfolio } = this.state;
+    // this.props.importFromInvestopedia(rawPortfolio)
+    //   .then(portfolio => this.props.updatePrices(portfolio.stocks));
     this.props.importFromInvestopedia(rawPortfolio)
-      .then(portfolio => this.props.updatePrices(portfolio.stocks));
+      .then(() => this.updatePrices());
     this.resetImport();
+    // Navigate back to portfolio tab
+    this.setState({
+      activeIndex: 0,
+    });
+  }
+
+  handleTabChange(e, { activeIndex }) {
+    this.setState({
+      activeIndex,
+    });
   }
 
   resetImport() {
@@ -50,12 +69,29 @@ class StockPortfolioComponent extends Component {
     });
   }
 
+  updatePrices() {
+    const { portfolio = { stocks: [] } } = this.props;
+    const { stocks } = portfolio;
+    this.props.updatePrices(stocks)
+      .then(() => {
+        this.setState({
+          lastPricesUpdate: Date.now(),
+          currentTime: Date.now(),
+        });
+      });
+  }
+
   setupStockPriceWatch() {
     this.priceUpdateInterval = setInterval(() => {
-      const { portfolio = { stocks: [] } } = this.props;
-      const { stocks } = portfolio;
-      this.props.updatePrices(stocks);
+      this.updatePrices();
     }, 1000 * 60 * 5 /* 5 minutes */);
+
+    // Update current time every 15 seconds to calculate time since last update
+    this.currentTimeInterval = setInterval(() => {
+      this.setState({
+        currentTime: Date.now(),
+      });
+    }, 1000 * 15)
     // TODO: Dynamically set timeout based on current time/market open time
   }
 
@@ -64,13 +100,12 @@ class StockPortfolioComponent extends Component {
   }
 
   componentWillUnmount() {
-    if (this.priceUpdateInterval) {
-      clearInterval(this.priceUpdateInterval);
-    }
+    clearInterval(this.priceUpdateInterval);
+    clearInterval(this.currentTimeInterval);
   }
 
   render() {
-    const { rawPortfolio } = this.state;
+    const { rawPortfolio, activeIndex, lastPricesUpdate, currentTime } = this.state;
     const { portfolio = { stocks: [] }, currentPrices } = this.props;
 
     const stocks = portfolio
@@ -79,22 +114,38 @@ class StockPortfolioComponent extends Component {
 
     const createdDate = portfolio ? format(parse(portfolio.date), 'MMM D, YYYY h:mm:ssa') : '';
 
+    const lastUpdate = `Prices Updated ${differenceInSeconds(currentTime, lastPricesUpdate)} seconds ago`;
 
     const panes = [
-      { menuItem: 'Portfolio',
-        render: () => <Tab.Pane>{portfolio ?
-          <PortfolioCurrent createdDate={createdDate} stocks={stocks}/> : 'No portfolio, please import'}</Tab.Pane>
+      {
+        menuItem: 'Portfolio',
+        render: () => <Tab.Pane>{
+          portfolio
+            ? <PortfolioCurrent
+              createdDate={createdDate}
+              lastUpdate={lastUpdate}
+              stocks={stocks}/>
+            : 'No portfolio, please import'
+        }
+        </Tab.Pane>
       },
       {
-        menuItem: 'Import', render: () => <Tab.Pane><PortfolioImport
-          rawPortfolio={rawPortfolio}
-          handleChange={(e) => this.handleChange(e)}
-          handleSubmit={() => this.handleSubmit()}
-        /></Tab.Pane>
+        menuItem: 'Import', render: () =>
+          <Tab.Pane>
+            <PortfolioImport
+              rawPortfolio={rawPortfolio}
+              handleChange={(e) => this.handleChange(e)}
+              handleSubmit={() => this.handleSubmit()}
+            />
+          </Tab.Pane>
       }
     ];
     return (
-      <Tab panes={panes}/>
+      <Tab
+        panes={panes}
+        activeIndex={activeIndex}
+        onTabChange={(e, data) => this.handleTabChange(e, data)}
+      />
     );
   }
 }

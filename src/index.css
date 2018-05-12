@@ -9,3 +9,7 @@
 .ui.overlay.right.visible.sidebar {
     background-color: #fff;
 }
+
+.table__row--border-top > td {
+    border-top: 2px solid #333 !important;
+}

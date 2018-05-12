@@ -52,7 +52,6 @@ export class DefaultView extends React.Component {
             animation='overlay'
             direction='right'
             visible={sidebarVisible}
-            inverted
           >
             <SearchMenu/>
           </Sidebar>

@@ -45,6 +45,7 @@ export function getStockPrices(stocks) {
     return stockListingService.getMarketBatch(symbols)
       .then(({ data }) => {
         Object.keys(data).forEach(symbol => dispatch(setCurrentPrice(symbol, data[symbol].price)));
+        return Promise.resolve();
       });
   }
 }
