@@ -13,24 +13,10 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{height: '100%'}}>
         <DefaultView>
           <Grid padded='horizontally'>
-            <Grid.Column width={5}>
-              <Card>
-                <Card.Content>
-                  <StockSearch/>
-                </Card.Content>
-                <Card.Content>
-                  <SearchResult/>
-                </Card.Content>
-                <Card.Content>
-                  <Card.Header>Recent Searches</Card.Header>
-                  <RecentItemsList/>
-                </Card.Content>
-              </Card>
-            </Grid.Column>
-            <Grid.Column width={11}>
+            <Grid.Column width={16}>
               <StockPortfolio/>
             </Grid.Column>
           </Grid>
