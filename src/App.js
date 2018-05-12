@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Grid } from 'semantic-ui-react';
 import { StockSearch } from "./containers/StockSearch";
-import { AddStocksForm } from "./containers/AddStocksForm";
 import { RecentItemsList } from './containers/RecentItemsList';
 import { SearchResult } from './containers/SearchResult';
 import { DefaultView } from './views/DefaultView';
@@ -37,7 +36,6 @@ class App extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <StockPortfolio />
-                  {/*<AddStocksForm/>*/}
                 </Grid.Column>
               </Grid.Row>
             </Grid.Column>

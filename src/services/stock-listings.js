@@ -32,7 +32,7 @@ class StockListingClass {
         this._isLoaded = true;
         resolve();
       } else {
-        api.symbols()
+        api.getSymbols()
           .then(({ data }) => {
             this.setItem(this.LOCAL_KEY, data);
             this.stocks = data;
@@ -44,12 +44,17 @@ class StockListingClass {
   }
 
   getCompany(symbol) {
-    return api.company(symbol);
+    return api.getCompany(symbol);
   }
 
   getLogo(symbol) {
-    return api.logo(symbol);
+    return api.getLogo(symbol);
   }
+
+  getMarketBatch(symbols = [], types = ['price'], chartOpts = {}) {
+    return api.getMarketBatch(symbols, types, chartOpts);
+  }
+
 }
 
 let stockListingSingleton = null;

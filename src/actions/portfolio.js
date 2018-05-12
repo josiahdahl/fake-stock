@@ -15,5 +15,6 @@ export function importFromInvestopedia(text) {
     const portfolio = createPortfolioRecord(stocks);
 
     dispatch(importPortfolio(portfolio));
+    return Promise.resolve(portfolio);
   }
 }

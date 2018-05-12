@@ -12,7 +12,6 @@ function cacheStock(stock) {
 }
 
 export function getStock(symbol) {
-  debugger;
   return function (dispatch) {
     return Promise.all([
       stockListingService.getCompany(symbol),
@@ -26,6 +25,26 @@ export function getStock(symbol) {
         };
         dispatch(cacheStock(stock));
         return stock;
+      });
+  }
+}
+
+export const SET_CURRENT_PRICE = 'SET_CURRENT_PRICE';
+
+function setCurrentPrice(symbol, price) {
+  return {
+    type: SET_CURRENT_PRICE,
+    symbol,
+    price,
+  }
+}
+
+export function getStockPrices(stocks) {
+  return function (dispatch) {
+    const symbols = stocks.map(s => s.symbol);
+    return stockListingService.getMarketBatch(symbols)
+      .then(({ data }) => {
+        Object.keys(data).forEach(symbol => dispatch(setCurrentPrice(symbol, data[symbol].price)));
       });
   }
 }
