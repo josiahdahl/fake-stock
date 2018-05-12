@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { Tab } from 'semantic-ui-react';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 import { PortfolioImport } from '../components/PortfolioImport';
 import { importFromInvestopedia } from '../actions/portfolio';
 import { PortfolioCurrent } from '../components/PortfolioCurrent';
 import { getStockPrices } from '../actions/stocks';
 import { StockListingService } from '../services/stock-listings';
-import { Tab } from 'semantic-ui-react';
 
 class StockPortfolioComponent extends Component {
   static propTypes = {
@@ -75,13 +77,21 @@ class StockPortfolioComponent extends Component {
       ? portfolio.stocks.map(s => ({ ...s, currentPrice: currentPrices[s.symbol] || 0 }))
       : [];
 
+    const createdDate = portfolio ? format(parse(portfolio.date), 'MMM D, YYYY h:mm:ssa') : '';
+
+
     const panes = [
-      {menuItem: 'Portfolio', render: () => <Tab.Pane>{portfolio ? <PortfolioCurrent stocks={stocks}/> : 'No portfolio, please import'}</Tab.Pane>},
-      {menuItem: 'Import', render: () => <Tab.Pane><PortfolioImport
+      { menuItem: 'Portfolio',
+        render: () => <Tab.Pane>{portfolio ?
+          <PortfolioCurrent createdDate={createdDate} stocks={stocks}/> : 'No portfolio, please import'}</Tab.Pane>
+      },
+      {
+        menuItem: 'Import', render: () => <Tab.Pane><PortfolioImport
           rawPortfolio={rawPortfolio}
           handleChange={(e) => this.handleChange(e)}
           handleSubmit={() => this.handleSubmit()}
-        /></Tab.Pane>}
+        /></Tab.Pane>
+      }
     ];
     return (
       <Tab panes={panes}/>

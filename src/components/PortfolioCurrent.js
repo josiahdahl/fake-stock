@@ -15,7 +15,11 @@ const StockRow = ({ symbol, purchasePrice, quantity, currentPrice }) => <Table.R
 </Table.Row>;
 
 
-export const PortfolioCurrent = ({ headers = ['Symbol', 'Quantity', 'Purchase Price', 'Current Price'], stocks }) => {
+export const PortfolioCurrent = ({
+                                   headers = ['Symbol', 'Quantity', 'Purchase Price', 'Current Price'],
+                                   stocks,
+                                   createdDate,
+                                 }) => {
   return (
     <Table celled>
       <Table.Header>
@@ -24,6 +28,13 @@ export const PortfolioCurrent = ({ headers = ['Symbol', 'Quantity', 'Purchase Pr
       <Table.Body>
         {stocks.map(stock => <StockRow key={stock.symbol} {...stock}/>)}
       </Table.Body>
+      <Table.Footer>
+        <Table.Row>
+          <Table.HeaderCell colSpan={headers.length} textAlign='right'>
+            <p style={{ color: '#aaa' }}>Portfolio Updated {createdDate}</p>
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Footer>
     </Table>
   );
 };
@@ -31,4 +42,5 @@ export const PortfolioCurrent = ({ headers = ['Symbol', 'Quantity', 'Purchase Pr
 PortfolioCurrent.propTypes = {
   headers: PropTypes.array,
   stocks: PropTypes.array,
+  createdDate: PropTypes.string,
 };
