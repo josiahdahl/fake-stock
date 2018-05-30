@@ -14,11 +14,13 @@ const StockHeaders = () =>
     <Table.HeaderCell textAlign='right'>Quantity</Table.HeaderCell>
     <Table.HeaderCell textAlign='right'>Purchase Price</Table.HeaderCell>
     <Table.HeaderCell textAlign='right'>Current Price</Table.HeaderCell>
-    <Table.HeaderCell textAlign='right'>Gain/Loss</Table.HeaderCell>
+    <Table.HeaderCell textAlign='right'>Total Value</Table.HeaderCell>
+    <Table.HeaderCell textAlign='right'>Total Gain/Loss</Table.HeaderCell>
   </Table.Row>;
 
 const StockRow = ({ symbol, purchasePrice, quantity, currentPrice }) => {
   const gainLoss = (currentPrice * quantity) - (purchasePrice * quantity);
+  const totalValue = currentPrice * quantity;
 
   return (
     <Table.Row>
@@ -26,6 +28,7 @@ const StockRow = ({ symbol, purchasePrice, quantity, currentPrice }) => {
       <Table.Cell textAlign='right'>{quantity}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(purchasePrice)}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(currentPrice)}</Table.Cell>
+      <Table.Cell textAlign='right'>${formatDollar(totalValue)}</Table.Cell>
       <Table.Cell textAlign='right' style={gainLossStyle(gainLoss)}>${formatDollar(gainLoss)}</Table.Cell>
     </Table.Row>
   )
@@ -54,14 +57,16 @@ export const PortfolioCurrent = ({ stocks, createdDate, lastUpdate }) => {
       <Table.Footer>
         <Table.Row className='table__row--border-top'>
           <Table.Cell colSpan={3}>{/*Blank*/}</Table.Cell>
-          <Table.Cell textAlign='right'><b>Total Gain/Loss</b></Table.Cell>
-          <Table.Cell textAlign='right' colSpan={1} style={gainLossStyle(gainLoss)}>{formatDollar(gainLoss)}</Table.Cell>
+          <Table.Cell textAlign='right'><b>Total</b></Table.Cell>
+          <Table.Cell textAlign='right'><b>${formatDollar(totalValue)}</b></Table.Cell>
+          <Table.Cell textAlign='right' colSpan={1}
+                      style={gainLossStyle(gainLoss)}>{formatDollar(gainLoss)}</Table.Cell>
         </Table.Row>
         <Table.Row>
           <Table.HeaderCell colSpan={2} textAlign='left' style={{ color: '#aaa' }}>
             Portfolio Updated {createdDate}
           </Table.HeaderCell>
-          <Table.HeaderCell>{/*Blank*/}</Table.HeaderCell>
+          <Table.HeaderCell colSpan={2}>{/*Blank*/}</Table.HeaderCell>
           <Table.HeaderCell colSpan={2} textAlign='right' style={{ color: '#aaa' }}>
             {lastUpdate}
           </Table.HeaderCell>
