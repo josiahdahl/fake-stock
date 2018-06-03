@@ -25,5 +25,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "jest-mock-axios": "^2.1.11",
+    "react-test-renderer": "^16.4.0"
   }
 }

@@ -30,4 +30,4 @@ export const ranges = {
   DYNAMIC: '/dynamic',
 };
 
-export const chart = (range, parameters) => api('/chart').get(range, { ...defaultParameters, parameters });
+export const chart = (symbol, range, parameters) => api.get(`/stock/${symbol}/chart`)(range, { ...defaultParameters, ...parameters });

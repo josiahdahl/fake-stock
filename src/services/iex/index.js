@@ -1,6 +1,6 @@
-import { apiFactory as factory } from '../api.factory';
+import { apiFactory as factory } from '../api-utils';
 import { baseURI } from './settings';
 
 export const apiFactory = factory(baseURI);
 
-export * as chart from './chart';
+export * from './chart';
