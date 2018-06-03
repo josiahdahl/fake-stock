@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import { StockSparkline } from './StockSparkline';
 
 const gainLossColor = amount => amount === 0 ? 'inherit' : amount < 0 ? 'red' : 'green';
 
@@ -24,7 +25,7 @@ const StockRow = ({ symbol, purchasePrice, quantity, currentPrice }) => {
 
   return (
     <Table.Row>
-      <Table.Cell><b>{symbol}</b></Table.Cell>
+      <Table.Cell><b>{symbol}</b><StockSparkline symbol={symbol}/></Table.Cell>
       <Table.Cell textAlign='right'>{quantity}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(purchasePrice)}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(currentPrice)}</Table.Cell>
