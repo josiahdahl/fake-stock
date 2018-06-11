@@ -9,18 +9,23 @@ import { PortfolioImport } from '../components/PortfolioImport';
 import { importFromInvestopedia } from '../actions/portfolio';
 import { PortfolioCurrent } from '../components/PortfolioCurrent';
 import { getStockPrices } from '../actions/stocks';
+import { getOneDayChart } from '../actions/charts';
+import { ranges } from '../services/iex/chart';
 
 class StockPortfolioComponent extends Component {
   static propTypes = {
     importFromInvestopedia: PropTypes.func.isRequired,
     updatePrices: PropTypes.func.isRequired,
+    updateSparklines: PropTypes.func.isRequired,
     portfolio: PropTypes.object,
     currentPrices: PropTypes.object,
   };
 
-  priceUpdateInterval;
-  currentTimeInterval;
-
+  intervals = {
+    priceUpdate: null,
+    currentTime: null,
+    sparklineUpdate: null,
+  };
 
   state = {
     rawPortfolio: '',
@@ -59,6 +64,15 @@ class StockPortfolioComponent extends Component {
     });
   }
 
+  updateSparklines() {
+    const { portfolio = { stocks: [] } } = this.props;
+    const { stocks } = portfolio;
+
+    stocks.forEach(({ symbol }) => {
+      this.props.updateSparklines(symbol);
+    });
+  }
+
   updatePrices() {
     const { portfolio = { stocks: [] } } = this.props;
     const { stocks } = portfolio;
@@ -71,35 +85,51 @@ class StockPortfolioComponent extends Component {
       });
   }
 
-  setupStockPriceWatch() {
-    this.priceUpdateInterval = setInterval(() => {
+  setupIntervals() {
+    this.intervals.priceUpdate = setInterval(() => {
       this.updatePrices();
     }, 1000 * 60 * 5 /* 5 minutes */);
 
     // Update current time every 15 seconds to calculate time since last update
-    this.currentTimeInterval = setInterval(() => {
+    this.intervals.currentTime = setInterval(() => {
       this.setState({
         currentTime: Date.now(),
       });
-    }, 1000 * 15)
+    }, 1000 * 15);
     // TODO: Dynamically set timeout based on current time/market open time
+    this.intervals.sparklineUpdate = setInterval(() => {
+      this.updateSparklines();
+    }, 1000 * 60 * 5 /* 5 minutes */);
+  }
+
+  clearIntervals() {
+    for (let interval in this.intervals) {
+      clearInterval(this.intervals[interval]);
+    }
   }
 
   componentDidMount() {
-    this.setupStockPriceWatch();
+    this.updatePrices();
+    this.updateSparklines();
+    this.setupIntervals();
   }
 
   componentWillUnmount() {
-    clearInterval(this.priceUpdateInterval);
-    clearInterval(this.currentTimeInterval);
+    this.clearIntervals();
   }
 
   render() {
     const { rawPortfolio, activeIndex, lastPricesUpdate, currentTime } = this.state;
-    const { portfolio = { stocks: [] }, currentPrices } = this.props;
+    const { portfolio = { stocks: [] }, currentPrices, charts } = this.props;
+
+    const chartData = charts[ranges.ONE_DAY];
 
     const stocks = portfolio
-      ? portfolio.stocks.map(s => ({ ...s, currentPrice: currentPrices[s.symbol] || 0 }))
+      ? portfolio.stocks.map(s => ({
+        ...s,
+        currentPrice: currentPrices[s.symbol] || 0,
+        chart: chartData[s.symbol],
+      }))
       : [];
 
     const createdDate = portfolio ? format(parse(portfolio.date), 'MMM D, YYYY h:mm:ssa') : '';
@@ -141,20 +171,23 @@ class StockPortfolioComponent extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { portfolio, stocks } = state;
+  const { portfolio, stocks, charts } = state;
   const { currentPrices } = stocks;
+
 
   return {
     portfolio: portfolio.currentId
       ? portfolio.entities[portfolio.currentId]
       : null,
     currentPrices,
+    charts,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
   importFromInvestopedia: text => dispatch(importFromInvestopedia(text)),
   updatePrices: stocks => dispatch(getStockPrices(stocks)),
+  updateSparklines: symbol => dispatch(getOneDayChart(symbol)),
 });
 
 export const StockPortfolio = connect(
