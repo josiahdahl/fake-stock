@@ -19,13 +19,13 @@ const StockHeaders = () =>
     <Table.HeaderCell textAlign='right'>Total Gain/Loss</Table.HeaderCell>
   </Table.Row>;
 
-const StockRow = ({ symbol, purchasePrice, quantity, currentPrice }) => {
+const StockRow = ({ symbol, purchasePrice, quantity, currentPrice, chart }) => {
   const gainLoss = (currentPrice * quantity) - (purchasePrice * quantity);
   const totalValue = currentPrice * quantity;
 
   return (
     <Table.Row>
-      <Table.Cell><b>{symbol}</b><StockSparkline symbol={symbol}/></Table.Cell>
+      <Table.Cell><b>{symbol}</b><StockSparkline chart={chart}/></Table.Cell>
       <Table.Cell textAlign='right'>{quantity}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(purchasePrice)}</Table.Cell>
       <Table.Cell textAlign='right'>${formatDollar(currentPrice)}</Table.Cell>
