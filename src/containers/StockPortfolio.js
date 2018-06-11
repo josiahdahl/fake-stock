@@ -44,12 +44,18 @@ class StockPortfolioComponent extends Component {
   handleSubmit() {
     const { rawPortfolio } = this.state;
     this.props.importFromInvestopedia(rawPortfolio)
-      .then(() => this.updatePrices());
-    this.resetImport();
-    // Navigate back to portfolio tab
-    this.setState({
-      activeIndex: 0,
-    });
+      .then(() => Promise.all([
+          this.updatePrices(),
+          this.updateSparklines(),
+        ]
+      ))
+      .then(() => {
+        this.resetImport();
+        // Navigate back to portfolio tab
+        this.setState({
+          activeIndex: 0,
+        });
+      });
   }
 
   handleTabChange(e, { activeIndex }) {
