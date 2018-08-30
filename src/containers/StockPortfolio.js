@@ -166,11 +166,13 @@ class StockPortfolioComponent extends Component {
       }
     ];
     return (
-      <Tab
-        panes={panes}
-        activeIndex={activeIndex}
-        onTabChange={(e, data) => this.handleTabChange(e, data)}
-      />
+      <div style={{maxWidth: '950px', margin: '0 auto'}}>
+        <Tab
+          panes={panes}
+          activeIndex={activeIndex}
+          onTabChange={(e, data) => this.handleTabChange(e, data)}
+        />
+      </div>
     );
   }
 }
