@@ -11,6 +11,7 @@ import { PortfolioCurrent } from '../components/PortfolioCurrent';
 import { getStockPrices } from '../actions/stocks';
 import { getOneDayChart } from '../actions/charts';
 import { ranges } from '../services/iex/chart';
+import _get from 'lodash/get';
 
 class StockPortfolioComponent extends Component {
   static propTypes = {
@@ -71,8 +72,7 @@ class StockPortfolioComponent extends Component {
   }
 
   updateSparklines() {
-    const { portfolio = { stocks: [] } } = this.props;
-    const { stocks } = portfolio;
+    const stocks = _get(this.props, 'portfolio.stocks', []);
 
     stocks.forEach(({ symbol }) => {
       this.props.updateSparklines(symbol);
@@ -80,8 +80,7 @@ class StockPortfolioComponent extends Component {
   }
 
   updatePrices() {
-    const { portfolio = { stocks: [] } } = this.props;
-    const { stocks } = portfolio;
+    const stocks = _get(this.props, 'portfolio.stocks', []);
     this.props.updatePrices(stocks)
       .then(() => {
         this.setState({

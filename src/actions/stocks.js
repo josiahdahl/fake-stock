@@ -42,6 +42,9 @@ function setCurrentPrice(symbol, price) {
 export function getStockPrices(stocks) {
   return function (dispatch) {
     const symbols = stocks.map(s => s.symbol);
+    if (symbols.length === 0) {
+      return Promise.resolve();
+    }
     return stockListingService.getMarketBatch(symbols)
       .then(({ data }) => {
         Object.keys(data).forEach(symbol => dispatch(setCurrentPrice(symbol, data[symbol].price)));
