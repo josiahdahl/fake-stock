@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container, Header, Icon, Menu, Sidebar } from 'semantic-ui-react';
 import { StockSearch } from '../containers/StockSearch';
 import { SearchResult } from '../containers/SearchResult';
@@ -19,6 +20,10 @@ const SearchMenu = () => (
 
 
 export class DefaultView extends React.Component {
+  static propTypes = {
+    handleNavigate: PropTypes.func.isRequired,
+  };
+
   state = {
     sidebarVisible: false,
   };
@@ -31,7 +36,7 @@ export class DefaultView extends React.Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, handleNavigate } = this.props;
     const { sidebarVisible } = this.state;
     return (
       <Container fluid={true} style={{ height: '100%' }}>
@@ -39,6 +44,8 @@ export class DefaultView extends React.Component {
           <Menu.Item name='home' title="Yes, it's a play on 'Fake Block' from Arrested Development">
             <b>Fake Stock</b>
           </Menu.Item>
+          <Menu.Item name='portfolio' onClick={() => handleNavigate('portfolio')}>Portfolio</Menu.Item>
+          <Menu.Item name='about' onClick={() => handleNavigate('about')}>About</Menu.Item>
           <Menu.Item
             name='search'
             position='right'
