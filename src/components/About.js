@@ -32,6 +32,12 @@ export const About = (props) => {
       <List>
         <List.Item>
           <List.Content>
+            <List.Header>Mobile responsiveness</List.Header>
+            <List.Description>The app was meant to be used mainly on the desktop, so no attempt at responsiveness has been made. It's best viewed at &gt; 1200px wide.</List.Description>
+          </List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Content>
             <List.Header>Portfolio value over time</List.Header>
             <List.Description>Since each iteration of the portfolio is saved, it should be simple to show a graph or
               display of the total value over time.</List.Description>
