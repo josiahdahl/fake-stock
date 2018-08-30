@@ -36,8 +36,8 @@ export class DefaultView extends React.Component {
     return (
       <Container fluid={true} style={{ height: '100%' }}>
         <Menu>
-          <Menu.Item name='home'>
-            <b>Investopedia+</b>
+          <Menu.Item name='home' title="Yes, it's a play on 'Fake Block' from Arrested Development">
+            <b>Fake Stock</b>
           </Menu.Item>
           <Menu.Item
             name='search'
